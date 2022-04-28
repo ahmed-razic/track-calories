@@ -157,6 +157,9 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
         UICtrl.populateList(items);
       }
 
+      const totalCalories = ItemCtrl.getTotalCalories();
+      UICtrl.showTotalCalories(totalCalories);
+
       loadEventListeners();
     },
   };
