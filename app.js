@@ -252,8 +252,6 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
       const itemToEdit = ItemCtrl.getItemById(id);
 
-      console.log(itemToEdit);
-
       ItemCtrl.setCurrentItem(itemToEdit);
 
       UICtrl.addItemToForm();
