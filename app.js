@@ -13,9 +13,9 @@ const ItemCtrl = (function () {
   //Data structure
   const data = {
     items: [
-      { id: 0, name: 'Steak Dinner', calories: 1200 },
-      { id: 0, name: 'Cookie', calories: 400 },
-      { id: 0, name: 'Eggs', calories: 300 },
+      // { id: 0, name: 'Steak Dinner', calories: 1200 },
+      // { id: 0, name: 'Cookie', calories: 400 },
+      // { id: 0, name: 'Eggs', calories: 300 },
     ],
     currentItem: null,
     totalCalories: 0,
@@ -41,6 +41,8 @@ const ItemCtrl = (function () {
       const newItem = new Item(ID, name, calories);
 
       data.items.push(newItem);
+
+      return newItem;
     },
   };
 })();
@@ -78,6 +80,32 @@ const UICtrl = (function () {
         calories: document.querySelector(UISelectors.itemCaloriesInput).value,
       };
     },
+
+    addListItem: function (item) {
+      UICtrl.showList();
+      const li = document.createElement('li');
+      li.className = 'collection-item';
+      li.id = `${item.id}`;
+      li.innerHTML = `<strong>${item.name}: </strong> <em>${item.calories} Calories</em>
+      <a href="#" class="secondary-content"><i class="edit-item fa fa-pencil"></i></a>`;
+
+      document
+        .querySelector(UISelectors.itemList)
+        .insertAdjacentElement('beforeend', li);
+    },
+
+    clearInputs: function () {
+      document.querySelector(UISelectors.itemNameInput).value = '';
+      document.querySelector(UISelectors.itemCaloriesInput).value = '';
+    },
+
+    hideList: function () {
+      document.querySelector(UISelectors.itemList).style.display = 'none';
+    },
+
+    showList: function () {
+      document.querySelector(UISelectors.itemList).style.display = 'block';
+    },
   };
 })();
 
@@ -98,12 +126,20 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     if (input.name !== '' && input.calories !== '') {
       const newItem = ItemCtrl.addItem(input.name, input.calories);
+      UICtrl.addListItem(newItem);
+
+      UICtrl.clearInputs();
     }
   };
   return {
     init: function () {
       const items = ItemCtrl.getItems();
-      UICtrl.populateList(items);
+
+      if (items.length === 0) {
+        UICtrl.hideList();
+      } else {
+        UICtrl.populateList(items);
+      }
 
       loadEventListeners();
     },
