@@ -25,6 +25,26 @@ const StorageCtrl = (function () {
 
       return items;
     },
+
+    updateItem: function (updatedItem) {
+      let items = JSON.parse(localStorage.getItem('items'));
+      items.forEach((item, index) => {
+        if (updatedItem.id === item.id) {
+          items.splice(index, 1, updatedItem);
+        }
+      });
+      localStorage.setItem('items', JSON.stringify(items));
+    },
+
+    deleteItem: function (id) {
+      let items = JSON.parse(localStorage.getItem('items'));
+      items.forEach((item, index) => {
+        if (id === item.id) {
+          items.splice(index, 1);
+        }
+      });
+      localStorage.setItem('items', JSON.stringify(items));
+    },
   };
 })();
 
@@ -342,7 +362,10 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     const totalCalories = ItemCtrl.getTotalCalories();
     UICtrl.showTotalCalories(totalCalories);
-    UICtrl.clearInputs();
+
+    StorageCtrl.updateItem(updatedItem);
+
+    UICtrl.clearEditState();
   };
 
   const itemDeleteSubmit = function (e) {
@@ -356,6 +379,9 @@ const App = (function (ItemCtrl, UICtrl, StorageCtrl) {
 
     const totalCalories = ItemCtrl.getTotalCalories();
     UICtrl.showTotalCalories(totalCalories);
+
+    StorageCtrl.deleteItem(currentItem.id);
+
     UICtrl.clearEditState();
   };
 
